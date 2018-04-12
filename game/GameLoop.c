@@ -7,6 +7,7 @@
 #include "GameLoop.h"
 #include "Input.h"
 #include "../paddle/Paddle.h"
+#include "GameLogic.h"
 
 extern Paddle left_paddle;
 extern Paddle right_paddle;
@@ -63,6 +64,15 @@ static void update_objects() {
   update_paddle_position(&left_paddle);
   update_paddle_position(&right_paddle);
   update_ball_position(&game_ball);
+
+  correct_paddle_position(&left_paddle);
+  correct_paddle_position(&right_paddle);
+  correct_ball_position(&game_ball);
+
+  check_ball_to_paddle_collision(&game_ball, &left_paddle, &right_paddle);
+  if (check_for_goal(&game_ball)) {
+    round_started = false;
+  }
 }
 
 static void render_frame(SDL_Renderer *renderer) {

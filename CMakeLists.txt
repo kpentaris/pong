@@ -28,6 +28,6 @@ add_executable(Pong
         paddle/Paddle.c
         paddle/Paddle.h
         ball/Ball.c
-        ball/Ball.h main.h)
+        ball/Ball.h main.h game/GameLogic.c game/GameLogic.h utils/MathUtils.c utils/MathUtils.h)
 
 target_link_libraries(Pong ${COMPILE_LIBRARIES})

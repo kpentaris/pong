@@ -44,7 +44,7 @@ void init_paddles() {
   right_paddle.x_pos = WINDOW_WIDTH - 20 - right_paddle.width;
 }
 
-short hit_ball(Paddle *paddle, Ball *ball, float paddle_offset_pct) {
+short hit_ball(Paddle *paddle, Ball *ball, float paddle_offset_pct /* between 0 and 1 */) {
   if (!ball) {
     fprintf(stderr, "Provided ball reference is null");
     goto error;
@@ -78,6 +78,9 @@ short hit_ball(Paddle *paddle, Ball *ball, float paddle_offset_pct) {
     } else if (new_angle >= 270) {
       new_angle = 540 - new_angle; // 360 + 180 - angle
     }
+    ball->x_pos = paddle->x_pos - ball->radius - 1;  // TODO MAKE BETTER
+  } else {
+    ball->x_pos = paddle->x_pos + paddle->width + 1; // TODO MAKE BETTER
   }
 
   change_ball_direction(ball, new_angle);
@@ -90,21 +93,6 @@ short hit_ball(Paddle *paddle, Ball *ball, float paddle_offset_pct) {
 }
 
 /**
- * If the paddle's position is off bounds, reset it to exactly the maximum.
- *
- * @param paddle
- */
-void correct_paddle_position(Paddle *paddle) {
-  if (paddle->y_pos <= 0) {
-    paddle->y_pos = 0;
-  }
-
-  if (paddle->y_pos >= WINDOW_HEIGHT - paddle->height) {
-    paddle->y_pos = WINDOW_HEIGHT - paddle->height;
-  }
-}
-
-/**
  * To be called on each frame.
  * If the paddle has a velocity, then its position must change by the same amount.
  * If no velocity is present then the position will remain unchanged.
@@ -113,7 +101,6 @@ void correct_paddle_position(Paddle *paddle) {
  */
 void update_paddle_position(Paddle *paddle) {
   paddle->y_pos += paddle->velocity;
-  correct_paddle_position(paddle);
 }
 
 /**

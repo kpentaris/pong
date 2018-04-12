@@ -18,6 +18,8 @@ short BALL_MAX_DECELERATION = -4; // arbitrary
 short BALL_MIN_DECELERATION = -2; // arbitrary
 short BALL_MIN_ACCELERATION = 2; // arbitrary
 short BALL_MAX_ACCELERATION = 4; // arbitrary
+short BALL_MIN_VELOCITY = 2;
+short BALL_MAX_VELOCITY = 10;
 
 /**
  * Global ball instance. This represents the ball used in the game.
@@ -56,6 +58,11 @@ short increase_ball_velocity(Ball *ball, short acceleration /*can be negative*/)
   }
 
   ball->velocity += acceleration;
+  if (ball->velocity <= BALL_MIN_VELOCITY) {
+    ball->velocity = BALL_MIN_VELOCITY;
+  } else if (ball->velocity > BALL_MAX_VELOCITY) {
+    ball->velocity = BALL_MAX_VELOCITY;
+  }
   return EXIT_SUCCESS;
 
   error:
@@ -75,54 +82,10 @@ short change_ball_direction(Ball *ball, float new_direction) {
   return EXIT_FAILURE;
 }
 
-// TODO Move to utils functions
-short find_symmetrical_angle(short angle, bool y_axis_symmetry) {
-  short new_angle;
-  if (y_axis_symmetry) {
-    if (angle < 180) {
-      new_angle = (short) (2 * 90 - angle);
-    } else {
-      new_angle = (short) (2 * 270 - angle);
-    }
-  } else {
-    if (angle < 90 || angle > 270) {
-      new_angle = (short) (2 * 360 - angle);
-    } else {
-      new_angle = (short) (2 * 180 - angle);
-    }
-  }
-  if (new_angle > 360) {
-    new_angle -= 360;
-  } else if (new_angle < 0) {
-    new_angle += 360;
-  }
-  return new_angle;
-}
-
-/**
- * Corrects the position of the ball in case it is about to go off-screen.
- *
- * @param ball
- */
-void correct_ball_position(Ball *ball) {
-  // Case A: ball is about to go off on the X Axis
-  if (ball->x_pos - BALL_RADIUS < 0 || ball->x_pos + BALL_RADIUS > WINDOW_WIDTH) {
-    change_ball_direction(ball, find_symmetrical_angle(ball->direction, true));
-    ball->x_pos = ball->x_pos - BALL_RADIUS < 0 ? BALL_RADIUS : WINDOW_WIDTH - BALL_RADIUS;
-  }
-  // Case B: ball is about to go off the Y Axis
-  if (ball->y_pos - BALL_RADIUS < 0 || ball->y_pos + BALL_RADIUS > WINDOW_HEIGHT) {
-    change_ball_direction(ball, find_symmetrical_angle(ball->direction, false));
-    ball->y_pos = ball->y_pos - BALL_RADIUS < 0 ? BALL_RADIUS : WINDOW_HEIGHT - BALL_RADIUS;
-  }
-  // both cases must be evaluated in case the ball hits the corner (corner case)
-}
-
 void update_ball_position(Ball *ball) {
   // PI * 2 / 360 = 0.01745. sin(radians)
   ball->y_pos += sin(ball->direction * 0.01745) * ball->velocity;
   ball->x_pos += cos(ball->direction * 0.01745) * ball->velocity;
-  correct_ball_position(ball);
 }
 
 // TODO Maybe implement ball wall bounce

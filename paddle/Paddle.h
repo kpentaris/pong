@@ -25,7 +25,7 @@ typedef struct Paddle {
 } Paddle;
 
 void init_paddles();
-short hit_ball(Paddle*, Ball*, float);
+short hit_ball(Paddle *paddle, Ball *ball, float paddle_offset_pct);
 short start_moving_paddle(Paddle *, PaddleDirection);
 short stop_moving_paddle(Paddle *);
 void correct_paddle_position(Paddle*);
