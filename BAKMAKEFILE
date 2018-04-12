@@ -1,0 +1,39 @@
+CC = gcc
+SDL_LIB = -L/e/C_Projects/Libraries/SDL2-2.0.8/i686-w64-mingw32/lib -lSDL2main -lSDL2
+SDL_INCLUDE = -I/e/C_Projects/Libraries/SDL2-2.0.8/i686-w64-mingw32/include
+CFLAGS = -Wall -c $(SDL_INCLUDE)
+LDFLAGS = -lmingw32 $(SDL_LIB)
+EXE = Pong.exe
+
+all: $(EXE)
+
+
+$(EXE): main.o GameLoop.o Paddle.o Ball.o
+
+	$(CC) *.o $(LDFLAGS) -o $@
+
+main.o: main.c
+
+	$(CC) $(CFLAGS) $< -o $@
+
+Ball.o: ball/Ball.c
+
+	$(CC) $(CFLAGS) $< -o $@
+
+Paddle.o: paddle/Paddle.c ball/Ball.c 
+
+	$(CC) $(CFLAGS) $< -o $@
+
+GameLoop.o: game/GameLoop.c Input.o
+
+	$(CC) $(CFLAGS) $< -o $@
+
+Input.o: game/Input.c Paddle.o
+
+	$(CC) $(CFLAGS) $< -o $@
+
+clean:
+
+	rm *.o && rm $(EXE)
+
+
