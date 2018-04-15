@@ -5,6 +5,7 @@
 #include "main.h"
 #include "paddle/Paddle.h"
 #include <stdio.h>
+#include <stdbool.h>
 
 static void seed_randomizer();
 
@@ -32,7 +33,7 @@ int main(int argc, char *argv[]) {
     return EXIT_FAILURE;
   }
 
-  start_game(window, renderer);
+  start_game(window, renderer, true);
   return EXIT_SUCCESS;
 }
 

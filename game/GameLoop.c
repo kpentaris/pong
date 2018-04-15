@@ -1,6 +1,7 @@
 //
 // @author kpentaris - 6/4/2018.
 //
+
 #include <SDL.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -18,23 +19,17 @@ static void render_frame(SDL_Renderer *);
 
 static void update_objects();
 
-static bool round_started = false;
+static void handle_input();
 
-void start_game(SDL_Window *window, SDL_Renderer *renderer) {
+static bool round_started = false;
+static bool two_player_mode = false;
+
+void start_game(SDL_Window *window, SDL_Renderer *renderer, bool two_players) {
+  two_player_mode = two_players;
   SDL_Event e;
   bool quit = false;
   while (!quit) {
-    // TODO Ask SO about use case and if using SDL events was better
-    const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
-    if (keyboardState[SDL_SCANCODE_UP] && keyboardState[SDL_SCANCODE_DOWN]) {
-      handle_no_key();
-    } else if (keyboardState[SDL_SCANCODE_DOWN]) {
-      handle_keydown(SDL_SCANCODE_DOWN);
-    } else if (keyboardState[SDL_SCANCODE_UP]) {
-      handle_keydown(SDL_SCANCODE_UP);
-    } else {
-      handle_no_key();
-    }
+    handle_input();
 
     while (SDL_PollEvent(&e)) {
       switch (e.type) {
@@ -58,6 +53,35 @@ void start_game(SDL_Window *window, SDL_Renderer *renderer) {
   }
   SDL_DestroyWindow(window);
   SDL_Quit();
+}
+
+static void handle_input() {
+  // TODO Ask SO about use case and if using SDL events was better
+  const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
+
+  // left paddle input
+  if (keyboardState[SDL_SCANCODE_W] && keyboardState[SDL_SCANCODE_S]) {
+    handle_no_key(&left_paddle);
+  } else if (keyboardState[SDL_SCANCODE_S]) {
+    handle_keydown(&left_paddle, PADDLE_DIRECTION_DOWN);
+  } else if (keyboardState[SDL_SCANCODE_W]) {
+    handle_keydown(&left_paddle, PADDLE_DIRECTION_UP);
+  } else {
+    handle_no_key(&left_paddle);
+  }
+
+  if (two_player_mode) {
+    // right paddle input
+    if (keyboardState[SDL_SCANCODE_UP] && keyboardState[SDL_SCANCODE_DOWN]) {
+      handle_no_key(&right_paddle);
+    } else if (keyboardState[SDL_SCANCODE_DOWN]) {
+      handle_keydown(&right_paddle, PADDLE_DIRECTION_DOWN);
+    } else if (keyboardState[SDL_SCANCODE_UP]) {
+      handle_keydown(&right_paddle, PADDLE_DIRECTION_UP);
+    } else {
+      handle_no_key(&right_paddle);
+    }
+  }
 }
 
 static void update_objects() {

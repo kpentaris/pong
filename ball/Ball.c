@@ -9,16 +9,16 @@
 #include "../main.h"
 #include "Ball.h"
 
-float BALL_MINIMAL_DEGREE_OFFSET = 10;
-float BALL_SMALL_DEGREE_OFFSET = 30;
-float BALL_MEDIUM_DEGREE_OFFSET = 45;
-float BALL_LARGE_DEGREE_OFFSET = 60;
+float BALL_MINIMAL_DEGREE_OFFSET = 20;
+float BALL_SMALL_DEGREE_OFFSET = 25;
+float BALL_MEDIUM_DEGREE_OFFSET = 35;
+float BALL_LARGE_DEGREE_OFFSET = 50;
 
 short BALL_MAX_DECELERATION = -4; // arbitrary
 short BALL_MIN_DECELERATION = -2; // arbitrary
 short BALL_MIN_ACCELERATION = 2; // arbitrary
 short BALL_MAX_ACCELERATION = 4; // arbitrary
-short BALL_MIN_VELOCITY = 2;
+short BALL_MIN_VELOCITY = 5;
 short BALL_MAX_VELOCITY = 10;
 
 /**
@@ -87,5 +87,3 @@ void update_ball_position(Ball *ball) {
   ball->y_pos += sin(ball->direction * 0.01745) * ball->velocity;
   ball->x_pos += cos(ball->direction * 0.01745) * ball->velocity;
 }
-
-// TODO Maybe implement ball wall bounce

@@ -67,7 +67,7 @@ short hit_ball(Paddle *paddle, Ball *ball, float paddle_offset_pct /* between 0 
     ball_acceleration = BALL_MAX_ACCELERATION;
   }
 
-  if (ball->direction > 180) { // ball comes in a downward angle
+  if (ball->direction > 180) { // ball comes in an upward angle
     new_angle = 360 - new_angle;
   }
 
@@ -78,7 +78,7 @@ short hit_ball(Paddle *paddle, Ball *ball, float paddle_offset_pct /* between 0 
     } else if (new_angle >= 270) {
       new_angle = 540 - new_angle; // 360 + 180 - angle
     }
-    ball->x_pos = paddle->x_pos - ball->radius - 1;  // TODO MAKE BETTER
+    ball->x_pos = paddle->x_pos - ball->radius * 2 - 1;  // TODO MAKE BETTER
   } else {
     ball->x_pos = paddle->x_pos + paddle->width + 1; // TODO MAKE BETTER
   }

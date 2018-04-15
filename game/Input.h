@@ -5,8 +5,10 @@
 #ifndef PONG_INPUT_H
 #define PONG_INPUT_H
 
-void handle_keydown(SDL_Scancode);
-void handle_keyup(SDL_Scancode);
-void handle_no_key();
+#include "../paddle/Paddle.h"
+
+void handle_keydown(Paddle *paddle, PaddleDirection direction);
+void handle_keyup(Paddle *paddle);
+void handle_no_key(Paddle *paddle);
 
 #endif //PONG_INPUT_H
